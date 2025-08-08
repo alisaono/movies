@@ -6,7 +6,7 @@ interface MovieCardProps {
 
 const MovieCard = ({ movie }: MovieCardProps) => {
   return (
-    <div className="group relative bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100">
+    <div className="group relative bg-gray-900 rounded-xl shadow-lg hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-800">
       {/* Poster Image */}
       <div className="relative aspect-[2/3] overflow-hidden">
         <img
@@ -15,11 +15,11 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 768px) 50vw, (max-width: 1200px) 16vw, 16vw"
         />
-        {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
+                {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
         {/* Rating badge */}
-        <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-sm font-semibold flex items-center gap-1">
+        <div className="absolute top-3 right-3 bg-black/90 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-sm font-semibold flex items-center gap-1 border border-gray-700">
           <span className="text-yellow-400">★</span>
           <span>{movie.vote_average.toFixed(1)}</span>
         </div>
@@ -28,12 +28,12 @@ const MovieCard = ({ movie }: MovieCardProps) => {
       {/* Content */}
       <div className="p-4">
         {/* Title */}
-        <h3 className="font-bold text-gray-900 text-lg leading-tight mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
+        <h3 className="font-bold text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors duration-200">
           {movie.title}
         </h3>
 
         {/* Release Year */}
-        <p className="text-gray-500 text-sm mb-3 font-medium">
+        <p className="text-gray-400 text-sm mb-3 font-medium">
           {movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'}
         </p>
 
@@ -42,13 +42,13 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           {getGenreNames(movie.genre_ids).slice(0, 2).map((genre) => (
             <span
               key={genre}
-              className="inline-block bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 text-xs px-3 py-1 rounded-full border border-blue-200 font-medium"
+              className="inline-block bg-gradient-to-r from-blue-900/50 to-indigo-900/50 text-blue-300 text-xs px-3 py-1 rounded-full border border-blue-700/50 font-medium backdrop-blur-sm"
             >
               {genre}
             </span>
           ))}
           {movie.genre_ids.length > 2 && (
-            <span className="inline-block bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full font-medium">
+            <span className="inline-block bg-gray-800 text-gray-300 text-xs px-3 py-1 rounded-full font-medium border border-gray-700">
               +{movie.genre_ids.length - 2}
             </span>
           )}

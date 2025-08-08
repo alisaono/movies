@@ -56,7 +56,7 @@ const MovieFeed = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Filter Controls */}
         <div className="mb-8">
@@ -82,17 +82,17 @@ const MovieFeed = ({
         {/* Empty state */}
         {movies.length === 0 && !isLoading && (
           <div className="text-center py-16">
-            <div className="text-gray-400 text-6xl mb-4">🎬</div>
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">No movies found</h3>
-            <p className="text-gray-500">Try adjusting your filters to find more movies.</p>
+            <div className="text-gray-600 text-6xl mb-4">🎬</div>
+            <h3 className="text-xl font-semibold text-gray-300 mb-2">No movies found</h3>
+            <p className="text-gray-400">Try adjusting your filters to find more movies.</p>
           </div>
         )}
 
         {/* Loading state */}
         {isLoading && (
           <div className="text-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Searching for movies...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto mb-4"></div>
+            <p className="text-gray-300">Searching for movies...</p>
           </div>
         )}
       </div>

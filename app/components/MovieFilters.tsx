@@ -32,12 +32,12 @@ const MovieFilters = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h2 className="text-xl font-bold mb-4">Filter Movies</h2>
+    <div className="bg-gray-900 rounded-lg shadow-lg border border-gray-800 p-6 mb-6">
+      <h2 className="text-xl font-bold text-white mb-4">Filter Movies</h2>
       
       {/* Max Duration */}
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Max Duration: {maxDuration} minutes
         </label>
         <input
@@ -47,17 +47,17 @@ const MovieFilters = ({
           step="15"
           value={maxDuration}
           onChange={(e) => setMaxDuration(Number(e.target.value))}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
         />
       </div>
 
       {/* Language */}
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Language</label>
+        <label className="block text-sm font-medium text-gray-300 mb-2">Language</label>
         <select
           value={selectedLanguage}
           onChange={(e) => setSelectedLanguage(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-2 bg-gray-800 border border-gray-700 text-white rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
         >
           {Object.entries(LANGUAGE_MAP).map(([code, name]) => (
             <option key={code} value={code}>{name}</option>
@@ -67,7 +67,7 @@ const MovieFilters = ({
 
       {/* Genres */}
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Genres</label>
+        <label className="block text-sm font-medium text-gray-300 mb-2">Genres</label>
         <div className="flex flex-wrap gap-2">
           {Object.entries(GENRE_MAP).map(([id, name]) => (
             <button
@@ -75,8 +75,8 @@ const MovieFilters = ({
               onClick={() => handleGenreToggle(Number(id))}
               className={`px-3 py-1 rounded-full text-sm border transition-colors ${
                 selectedGenres.includes(Number(id))
-                  ? 'bg-blue-500 text-white border-blue-500'
-                  : 'bg-white text-gray-700 border-gray-300 hover:border-blue-500'
+                  ? 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/25'
+                  : 'bg-gray-800 text-gray-300 border-gray-700 hover:border-blue-400 hover:text-white'
               }`}
             >
               {name}
@@ -89,7 +89,7 @@ const MovieFilters = ({
       <button
         onClick={onSearch}
         disabled={isLoading || selectedGenres.length === 0}
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+        className="w-full bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600 disabled:bg-gray-700 disabled:cursor-not-allowed transition-colors font-semibold shadow-lg hover:shadow-blue-500/25"
       >
         {isLoading ? 'Searching...' : 'Search Movies'}
       </button>
