@@ -5,13 +5,19 @@ import { useState } from "react";
 import MovieFilters from "./MovieFilters";
 import MovieCard from "./MovieCard";
 import MovieListCard from "./MovieListCard";
+import TrendingMovieList from "./TrendingMovieList";
 
-const MovieFeed = ({
-  initialMovies,
-}: {
-  initialMovies: Movie[];
-}) => {
-  
+type TrendingMovieListData = {
+  title: string;
+  movies: Movie[];
+}
+
+interface MovieFeedProps {
+  trendingMovieLists: TrendingMovieListData[];
+}
+
+const MovieFeed = ({ trendingMovieLists }: MovieFeedProps) => {
+
   const [hasSearched, setHasSearched] = useState<boolean>(false);
 
   const [movies, setMovies] = useState<Movie[][]>([]);
@@ -59,7 +65,7 @@ const MovieFeed = ({
       const fetchedMovies = result.results as Movie[];
       const processed: Movie[][] = [];
       if (isLongFlight) {
-        Array.from({ length: Math.ceil(movies.length / 2) }, (_, i) => {
+        Array.from({ length: Math.ceil(fetchedMovies.length / 2) }, (_, i) => {
           const moviePair = fetchedMovies.slice(i * 2, (i + 1) * 2);
           processed.push(moviePair);
         })
@@ -98,6 +104,19 @@ const MovieFeed = ({
             isLoading={isLoading}
           />
         </div>
+
+        {/* Trending Movie Lists */}
+        {!hasSearched && trendingMovieLists.length > 0 && (
+          <div className="flex flex-col gap-12">
+            {trendingMovieLists.map((movieList, index) => (
+              <TrendingMovieList
+                key={index}
+                title={movieList.title}
+                movies={movieList.movies}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Movies Grid */}
         {movies.length > 0 && (

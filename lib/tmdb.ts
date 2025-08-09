@@ -103,24 +103,29 @@ export const fetchPopularMovies = async (
 }
 
 export const searchMovies = async (
-  language: string,
+  minMinutes: number,
   maxMinutes: number,
-  selectedGenreIds: number[],
+  language: string = 'en',
+  selectedGenreIds: number[] = [],
   page: number = 1,
 ): Promise<MoviePage> => {
   if (!API_KEY) throw new Error("Invalid API key!");
   const params = new URLSearchParams({
-    with_runtime_lte: maxMinutes.toString(),
-    with_genres: selectedGenreIds.join('|'),
-    language: language,
-    include_adult: 'false',
-    include_video: 'false',
-    vote_average_gte: '6',
-    vote_count_gte: '1000',
-    sort_by: 'vote_average.desc',
-    page: '1',
+    "with_runtime.gte": minMinutes.toString(),
+    "with_runtime.lte": maxMinutes.toString(),
+    with_original_language: language,
+    "vote_average.gte": '6',
+    "vote_count.gte": '200',
+    certification_country: 'US',
+    "certification.lte": 'PG-13',
+    sort_by: 'popularity.desc',
+    page: page.toString(),
     api_key: API_KEY,
   });
+  if (selectedGenreIds.length > 0) {
+    params.append("with_genres", selectedGenreIds.join('|'));
+  }
+  console.log(params);
 
   const res = await fetch(`${BASE_URL}/discover/movie?${params.toString()}`, {
     headers: {
@@ -131,9 +136,25 @@ export const searchMovies = async (
   if (!res.ok) {
     const error = await res.text();
     console.error('TMDB error:', error);
-    throw new Error(`Failed: ${res.status}`);
+    throw new Error(`TMDB API failed: ${res.status}`);
   }
 
   const data = await res.json();
-  return data;
+  const results = data.results as Movie[];
+  const newResults = await Promise.all(
+    results.map(async ({ id }) => {
+      const res = await fetch(
+        `${BASE_URL}/movie/${id}?api_key=${API_KEY}`, {
+        headers: {
+          accept: 'application/json',
+        },
+      });
+      return res.json();
+    })
+  );
+  // console.log(newResults);
+  return {
+    ...data,
+    results: newResults,
+  }
 }
