@@ -3,6 +3,8 @@
 import { GENRE_MAP, LANGUAGE_MAP } from "@/lib/tmdb";
 
 interface MovieFiltersProps {
+  minDuration: number;
+  setMinDuration: (duration: number) => void;
   maxDuration: number;
   setMaxDuration: (duration: number) => void;
   selectedGenres: number[];
@@ -14,6 +16,8 @@ interface MovieFiltersProps {
 }
 
 const MovieFilters = ({
+  minDuration,
+  setMinDuration,
   maxDuration,
   setMaxDuration,
   selectedGenres,
@@ -35,20 +39,49 @@ const MovieFilters = ({
     <div className="bg-gray-900 rounded-lg shadow-lg border border-gray-800 p-6 mb-6">
       <h2 className="text-xl font-bold text-white mb-4">Filter Movies</h2>
       
-      {/* Max Duration */}
-      <div className="mb-4">
+      {/* Duration Range */}
+      <div className="mb-8">
         <label className="block text-sm font-medium text-gray-300 mb-2">
-          Max Duration: {maxDuration} minutes
+          Duration: {minDuration} - {maxDuration} minutes
         </label>
-        <input
-          type="range"
-          min="60"
-          max="240"
-          step="15"
-          value={maxDuration}
-          onChange={(e) => setMaxDuration(Number(e.target.value))}
-          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-        />
+        <div className="relative">
+          <input
+            type="range"
+            min="60"
+            max="240"
+            step="10"
+            value={minDuration}
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              if (value <= maxDuration) {
+                setMinDuration(value);
+              }
+            }}
+            className="absolute w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider z-10"
+            style={{ background: 'transparent' }}
+          />
+          <input
+            type="range"
+            min="60"
+            max="240"
+            step="15"
+            value={maxDuration}
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              if (value >= minDuration) {
+                setMaxDuration(value);
+              }
+            }}
+            className="absolute w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+          />
+          <div 
+            className="absolute h-2 bg-blue-500 rounded-lg pointer-events-none"
+            style={{
+              left: `${((minDuration - 60) / (240 - 60)) * 100}%`,
+              width: `${((maxDuration - minDuration) / (240 - 60)) * 100}%`
+            }}
+          />
+        </div>
       </div>
 
       {/* Language */}

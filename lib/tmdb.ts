@@ -45,10 +45,16 @@ export const getGenreNames = (genreIds: number[]): string[] => {
   return genreIds.map(id => GENRE_MAP[id]).filter(Boolean);
 };
 
+type MovieGenre = {
+  id?: number;
+  name: string;
+}
+
 export type Movie = {
   adult: boolean;
   backdrop_path: string;
-  genre_ids: number[];
+  genre_ids?: number[];
+  genres?: MovieGenre[];
   id: number;
   original_language: string;
   original_title: string;
@@ -60,6 +66,8 @@ export type Movie = {
   video: boolean;
   vote_average: number;
   vote_count: number;
+  runtime?: number;
+  homepage?: string;
 };
 
 type MoviePage = {

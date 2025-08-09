@@ -1,3 +1,4 @@
+import { Movie } from '@/lib/tmdb';
 import { NextRequest, NextResponse } from 'next/server';
 
 const API_KEY = process.env.TMDB_API_KEY;
@@ -13,17 +14,18 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { language, maxMinutes, selectedGenreIds, page = 1 } = body;
+    const { language, minMinutes, maxMinutes, selectedGenreIds, page = 1 } = body;
 
     const params = new URLSearchParams({
+      with_runtime_gte: minMinutes.toString(),
       with_runtime_lte: maxMinutes.toString(),
       with_genres: selectedGenreIds.join('|'),
-      language: language,
+      with_original_language: language,
       include_adult: 'false',
       include_video: 'false',
       vote_average_gte: '6',
-      vote_count_gte: '100',
-      sort_by: 'vote_average.desc',
+      vote_count_gte: '200',
+      sort_by: 'popularity.desc',
       page: page.toString(),
       api_key: API_KEY,
     });
@@ -44,7 +46,23 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await res.json();
-    return NextResponse.json(data);
+    const results = data.results as Movie[];
+    const newResults = await Promise.all(
+      results.map(async ({ id }) => {
+        const res = await fetch(
+          `${BASE_URL}/movie/${id}?api_key=${API_KEY}`, {
+          headers: {
+            accept: 'application/json',
+          },
+        });
+        return res.json();
+      })
+    );
+    // console.log(newResults);
+    return NextResponse.json({
+      ...data,
+      results: newResults,
+    });
   } catch (error) {
     console.error('Search API error:', error);
     return NextResponse.json(

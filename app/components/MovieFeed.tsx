@@ -10,11 +10,12 @@ const MovieFeed = ({
 }: {
   initialMovies: Movie[];
 }) => {
-  
+
   const [movies, setMovies] = useState<Movie[]>(initialMovies);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Filter states
+  const [minDuration, setMinDuration] = useState<number>(120);
   const [maxDuration, setMaxDuration] = useState<number>(180);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
@@ -24,7 +25,7 @@ const MovieFeed = ({
       alert('Please select at least one genre');
       return;
     }
-    
+
     setIsLoading(true);
     try {
       const response = await fetch('/api/movies/search', {
@@ -34,6 +35,7 @@ const MovieFeed = ({
         },
         body: JSON.stringify({
           language: selectedLanguage,
+          minMinutes: minDuration,
           maxMinutes: maxDuration,
           selectedGenreIds: selectedGenres,
           page: 1,
@@ -61,6 +63,8 @@ const MovieFeed = ({
         {/* Filter Controls */}
         <div className="mb-8">
           <MovieFilters
+            minDuration={minDuration}
+            setMinDuration={setMinDuration}
             maxDuration={maxDuration}
             setMaxDuration={setMaxDuration}
             selectedGenres={selectedGenres}
@@ -73,7 +77,7 @@ const MovieFeed = ({
         </div>
 
         {/* Movies Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
           {movies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
