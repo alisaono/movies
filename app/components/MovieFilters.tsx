@@ -18,6 +18,7 @@ interface MovieFiltersProps {
   setOriginAirport: (airport: string) => void;
   destinationAirport: string;
   setDestinationAirport: (airport: string) => void;
+  setIsLongFlight: (isLong: boolean) => void;
   onSearch: () => void;
   isLoading: boolean;
 }
@@ -38,6 +39,7 @@ const MovieFilters = ({
   setOriginAirport,
   destinationAirport,
   setDestinationAirport,
+  setIsLongFlight,
   onSearch,
   isLoading,
 }: MovieFiltersProps) => {
@@ -53,11 +55,14 @@ const MovieFilters = ({
     if (originAirport && destinationAirport && originAirport !== destinationAirport) {
       const flightTimeMinutes = estimateFlightTime(originAirport, destinationAirport);
       if (flightTimeMinutes) {
-        const timePerMovie = flightTimeMinutes > 240 ? Math.min(240, flightTimeMinutes / 2) : flightTimeMinutes;
-        const bufferTime = flightTimeMinutes > 240 ? 15 : 30;
+        const isLongFlight = flightTimeMinutes > 240;
+        const timePerMovie = isLongFlight ? Math.min(240, flightTimeMinutes / 2) : flightTimeMinutes;
+        const bufferTime = isLongFlight ? 15 : 30;
 
         const recommendedMin = Math.max(30, timePerMovie - bufferTime);
         const recommendedMax = Math.max(recommendedMin + 10, timePerMovie);
+        
+        setIsLongFlight(isLongFlight);
         setMinDuration(recommendedMin);
         setMaxDuration(recommendedMax);
       }
@@ -82,7 +87,8 @@ const MovieFilters = ({
 
   return (
     <div className="bg-gray-900 rounded-lg shadow-lg border border-gray-800 p-6 mb-6">
-      <h2 className="text-xl font-bold text-white mb-4">Filter Movies</h2>
+      <h2 className="text-xl font-bold text-white">SkyTime Cinema</h2>
+      <p className="text-gray-400 text-sm mb-4">Find movies perfectly timed for your flight and tailored to your tastes</p>
 
       {/* Flight Information */}
       <div className="mb-6 p-4 bg-gray-800 rounded-lg border border-gray-700">
@@ -220,7 +226,7 @@ const MovieFilters = ({
         disabled={isLoading || !originAirport || !destinationAirport || selectedGenres.length === 0}
         className="w-full bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600 disabled:bg-gray-700 disabled:cursor-not-allowed transition-colors font-semibold shadow-lg enabled:hover:shadow-blue-500/25"
       >
-        {isLoading ? 'Searching...' : 'Search Movies'}
+        {isLoading ? 'Curating Your Recommendations…' : 'Get My Recommendations'}
       </button>
     </div>
   );
