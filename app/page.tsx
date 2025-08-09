@@ -11,15 +11,15 @@ export default async function Home() {
 
   const trendingMovieLists = [
     {
-      title: "Quick Picks (60-100 min)",
+      title: "Great for Quick Journeys (60-100 min)",
       movies: shortMovies.results
     },
     {
-      title: "Perfect Length (100-140 min)", 
+      title: "Just Right for Mid-Length Flights (100-140 min)", 
       movies: mediumMovies.results
     },
     {
-      title: "Epic Adventures (140-200 min)",
+      title: "Perfect for Long-Haul Journeys (140-200 min)",
       movies: longMovies.results
     }
   ];
