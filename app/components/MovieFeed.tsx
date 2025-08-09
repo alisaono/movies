@@ -19,6 +19,8 @@ const MovieFeed = ({
   const [maxDuration, setMaxDuration] = useState<number>(180);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
+  const [originAirport, setOriginAirport] = useState<string>('');
+  const [destinationAirport, setDestinationAirport] = useState<string>('');
 
   const handleSearch = async () => {
     if (selectedGenres.length === 0) {
@@ -71,6 +73,10 @@ const MovieFeed = ({
             setSelectedGenres={setSelectedGenres}
             selectedLanguage={selectedLanguage}
             setSelectedLanguage={setSelectedLanguage}
+            originAirport={originAirport}
+            setOriginAirport={setOriginAirport}
+            destinationAirport={destinationAirport}
+            setDestinationAirport={setDestinationAirport}
             onSearch={handleSearch}
             isLoading={isLoading}
           />

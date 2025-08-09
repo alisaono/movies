@@ -17,18 +17,19 @@ export async function POST(request: NextRequest) {
     const { language, minMinutes, maxMinutes, selectedGenreIds, page = 1 } = body;
 
     const params = new URLSearchParams({
-      with_runtime_gte: minMinutes.toString(),
-      with_runtime_lte: maxMinutes.toString(),
+      "with_runtime.gte": minMinutes.toString(),
+      "with_runtime.lte": maxMinutes.toString(),
       with_genres: selectedGenreIds.join('|'),
       with_original_language: language,
-      include_adult: 'false',
-      include_video: 'false',
-      vote_average_gte: '6',
-      vote_count_gte: '200',
+      "vote_average.gte": '6',
+      "vote_count.gte": '200',
+      certification_country: 'US',
+      "certification.lte": 'PG-13',
       sort_by: 'popularity.desc',
       page: page.toString(),
       api_key: API_KEY,
     });
+    console.log(params);
 
     const res = await fetch(`${BASE_URL}/discover/movie?${params.toString()}`, {
       headers: {
